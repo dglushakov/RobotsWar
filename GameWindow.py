@@ -23,11 +23,6 @@ class GameWindow(QMainWindow):
 
         self.arena_grid = QGridLayout()
         self.update()
-        # for robot in self.arena.get_robots():
-        #     button = QPushButton()
-        #     button.setFixedSize(40, 40)
-        #     button.setStyleSheet(f"background: {robot.color};")
-        #     self.arena_grid.addWidget(button, robot.corY, robot.corX)
 
         main_layout = QHBoxLayout()
         main_layout.addLayout(self.arena_grid)
@@ -46,7 +41,7 @@ class GameWindow(QMainWindow):
         main_widget = QWidget()
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
-        self.setGeometry(0, 0, 600, 300)
+        self.setGeometry(0, 0, 800, 400)
 
     def new_game(self):
         self.arena.reset()
@@ -56,27 +51,23 @@ class GameWindow(QMainWindow):
         for i in range(1, self.arena.ArenaWidth + 1):
             for j in range(1, self.arena.ArenaHeight + 1):
                 button = QPushButton()
-                button.setFixedSize(40, 40)
+                button.setFixedSize(60, 60)
                 button.setStyleSheet(f"background: white;")
                 for robot in self.arena.get_robots():
                     if robot.corY == i and robot.corX == j:
                         button.setStyleSheet(f"background: {robot.color};")
-                        button.setText(str(robot.id))
+
+                        w = ''
+                        for weapon_slot in range(robot.weapon_slots):
+                            w += str(robot.weapon_equipped[weapon_slot])
+                        button_text = str(robot.id) + 'hp' + str(robot.health_points) + ' s' + str(robot.movement_speed) \
+                                      + '\nw: ' + w + ' \nb' + str(robot.body)
+                        button.setText(button_text)
                 self.arena_grid.addWidget(button, i, j)
-
-        # if self.arena_grid.itemAtPosition(2, 3):
-        #     btn = self.arena_grid.itemAtPosition(2, 3).widget()
-        #     btn.setStyleSheet(f"background: yellow;")
-
-        # btn = self.arena_grid.takeAt(2)
-        # btn_widget = btn.widget()
-        # btn_widget.deleteLater()
 
     def make_turn(self):
         self.arena.make_turn()
         self.draw_arena()
-
-        # self.arena.make_turn()
 
 
 if __name__ == '__main__':

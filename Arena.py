@@ -1,7 +1,5 @@
 import random
-from Robot import Robot
-
-aim_directions = ['up', 'right', 'down', 'left']
+from Robot import Robot, Weapon, Body
 
 
 class Arena:
@@ -12,6 +10,7 @@ class Arena:
     Robots = []
 
     def __init__(self):
+        self.loot = []
         print('new arena created')
 
     def reset(self):
@@ -66,28 +65,52 @@ class Arena:
     def get_robots(self):
         return self.Robots
 
-    def make_turn(self):
+    def make_turn(self): # TODO pickup body or weapon (delete from self.loot and add to robot.inventory
         for robot in self.Robots:
             if robot.color != 'gray':
                 for step in range(robot.movement_speed):
                     direction = random.choice(['x', 'y'])
-                    print('try to change ', direction)
                     if direction == 'x':
                         side = random.choice([-1, 1])
                         if not self.is_field_busy(robot.corX + side, robot.corY):
                             robot.move_to(robot.corX + side, robot.corY)
-                        else:
-                            print('cant go to ', robot.corX + side, robot.corY, ' from ', robot.corX, robot.corY)
-
                     if direction == 'y':
                         side = random.choice([-1, 1])
                         if not self.is_field_busy(robot.corX, robot.corY + side):
                             robot.move_to(robot.corX, robot.corY + side)
-                        else:
-                            print('cant go to ', robot.corX, robot.corY + side, ' from ', robot.corX, robot.corY)
 
-                    robot.aim_direction = random.choice(aim_directions)
-                    print('robot ', robot.id, ' is eqipped with ', robot.weapon, ' and looks ', robot.aim_direction)
+                need_to_change_body = random.randint(0, 1)
+                if need_to_change_body:
+                    robot.change_body_randomly()
+                need_to_change_weapons = random.randint(0, 1)
+                if need_to_change_weapons:
+                    robot.change_weapons_randomly()
+                need_to_change_direction = random.randint(0, 1)
+                if need_to_change_direction:
+                    robot.change_direction_randomly()
+
+                self.make_shot(robot)
+
+    def make_shot(self, robot):
+        affected_area = robot.get_shot_info()
+        for cell in affected_area:
+            for robot in self.Robots:
+                if robot.corX == cell['x'] and robot.corY == cell['y']:
+                    robot.health_points -= cell['damage']
+                    print(robot.id, ' damaged for ', cell['damage'])
+                    if robot.health_points <= 0:
+                        self.make_drop_from_destroyed_robot(robot)
+                        self.Robots.remove(robot)
+                        print('robot ', robot.id, ' destroyed')
+
+    def make_drop_from_destroyed_robot(self, destroyed_robot):
+        weapon_or_body = random.choice([0, 1])
+        if weapon_or_body == 0:
+            loot = Weapon(random.randint(0, 4))
+        else:
+            loot = Body(random.randint(0, 3))
+        self.loot.append({'x': destroyed_robot.corX, 'y': destroyed_robot.corY, 'loot': loot})
+
 
 if __name__ == "__main__":
     arena = Arena()
