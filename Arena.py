@@ -104,8 +104,12 @@ class Arena:
         affected_area = robot.get_shot_info()
         for cell in affected_area:
             for robot in self.Robots:
-                if robot.corX == cell['x'] and robot.corY == cell['y']:
-                    robot.health_points -= cell['damage']
+                if robot.corX == cell['x'] and robot.corY == cell['y']: # TODO body should take damage before robot and save it, now when body changes HP restores (bug)
+                    damage = cell['damage']
+                    not_absorbed_damage = damage - robot.body.hit_points
+                    robot.body.hit_points -= damage
+                    if not_absorbed_damage > 0:
+                        robot.health_points -= not_absorbed_damage
                     print(robot.id, ' damaged for ', cell['damage'])
                     if robot.health_points <= 0:
                         self.make_drop_from_destroyed_robot(robot)
