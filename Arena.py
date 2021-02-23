@@ -65,7 +65,7 @@ class Arena:
     def get_robots(self):
         return self.Robots
 
-    def make_turn(self): # TODO pickup body or weapon (delete from self.loot and add to robot.inventory
+    def make_turn(self):
         for robot in self.Robots:
             if robot.color != 'gray':
                 for step in range(robot.movement_speed):
@@ -78,6 +78,15 @@ class Arena:
                         side = random.choice([-1, 1])
                         if not self.is_field_busy(robot.corX, robot.corY + side):
                             robot.move_to(robot.corX, robot.corY + side)
+                    for item in self.loot:
+                        if item['x'] == robot.corX and item['y'] == robot.corY:
+                            if isinstance(item['loot'], Weapon):
+                                robot.inventory_weapon.append(item['loot'])
+                                self.loot.remove(item)
+                            elif isinstance(item['loot'], Body):
+                                robot.inventory_body.append(item['loot'])
+                                self.loot.remove(item)
+                            print('picked up ', *item)
 
                 need_to_change_body = random.randint(0, 1)
                 if need_to_change_body:
@@ -110,6 +119,7 @@ class Arena:
         else:
             loot = Body(random.randint(0, 3))
         self.loot.append({'x': destroyed_robot.corX, 'y': destroyed_robot.corY, 'loot': loot})
+        print('dropped ', *self.loot)
 
 
 if __name__ == "__main__":
@@ -117,4 +127,9 @@ if __name__ == "__main__":
     arena.reset()
     robots = arena.get_robots()
     print(*robots)
+    arena.make_turn()
+    arena.make_turn()
+    arena.make_turn()
+    arena.make_turn()
+    arena.make_turn()
     arena.make_turn()

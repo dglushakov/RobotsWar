@@ -23,6 +23,7 @@ class Robot:
         self.corY = y
 
     def change_body_randomly(self):
+        print(*self.inventory_body)
         if len(self.inventory_body) > 0:
             self.health_points = 1
             self.movement_speed = 1
@@ -118,9 +119,6 @@ class Robot:
 
 class Body:
     types = ['Simple', 'Hard', 'Light', 'Battle']
-    hit_points = None
-    movement_speed = None
-    weapon_slots = None
 
     def __init__(self, body_type=0):
         self.type = body_type
@@ -164,7 +162,12 @@ class Weapon:
 
 if __name__ == '__main__':
     Robot_red = Robot(color='red', robot_id=1, weapon=3)
-
-    Robot_red.move_to(3,3)
+    Robot_red.inventory_body.append(Body())
+    Robot_red.inventory_body.append(Body(body_type=1))
+    Robot_red.inventory_body.append(Body(body_type=2))
+    Robot_red.change_body_randomly()
+    Robot_red.change_body_randomly()
+    Robot_red.change_body_randomly()
+    Robot_red.move_to(3, 3)
     affected_area = Robot_red.get_shot_info()
     pass
