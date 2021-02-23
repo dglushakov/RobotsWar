@@ -2,19 +2,9 @@ import random
 
 
 class Robot:
-    # id = None
-    # color = None
-    # body = None
-    # weapon_equipped = []
-    # corX = None
-    # corY = None
-    # inventory_body = []
-    # inventory_weapon = []
-    # weapon_slots = None
-    # direction = None
     directions = ['up', 'right', 'down', 'left']
 
-    def __init__(self, color='gray', body=0, weapon=0, robot_id=0):
+    def __init__(self, color='gray', body=0, weapon=3, robot_id=0):
         self.id = robot_id
         self.color = color
         self.body = Body(body)
@@ -27,14 +17,6 @@ class Robot:
 
         self.inventory_body = []
         self.inventory_weapon = []
-        #
-        # rand_body = random.randint(0, 3)
-        # test_body = Body(rand_body)
-        # self.inventory_body.append(test_body)
-        #
-        # rand_weapon = random.randint(0, 4)
-        # test_weapon = Weapon(rand_weapon)
-        # self.inventory_weapon.append(test_weapon)
 
     def move_to(self, x, y):
         self.corX = x
@@ -64,20 +46,70 @@ class Robot:
 
     def get_shot_info(self):  # return x,y,damage
         affected_area = []
-        for weapon in self.weapon_equipped:  # TODO add another weapon types
+        for weapon in self.weapon_equipped:
             if weapon.type == 0:  # basic shoot
                 if self.direction == 'up':
-                    affected_area.append({'x': self.corX, 'y': self.corY - 1, 'damage': 1})
-                    affected_area.append({'x': self.corX, 'y': self.corY - 2, 'damage': 1})
+                    affected_area.append({'x': self.corX, 'y': self.corY + 1, 'damage': 1})
+                    affected_area.append({'x': self.corX, 'y': self.corY + 2, 'damage': 1})
                 if self.direction == 'right':
                     affected_area.append({'x': self.corX + 1, 'y': self.corY, 'damage': 1})
                     affected_area.append({'x': self.corX + 2, 'y': self.corY, 'damage': 1})
                 if self.direction == 'down':
-                    affected_area.append({'x': self.corX, 'y': self.corY + 1, 'damage': 1})
-                    affected_area.append({'x': self.corX, 'y': self.corY + 2, 'damage': 1})
+                    affected_area.append({'x': self.corX, 'y': self.corY - 1, 'damage': 1})
+                    affected_area.append({'x': self.corX, 'y': self.corY - 2, 'damage': 1})
                 if self.direction == 'left':
                     affected_area.append({'x': self.corX - 1, 'y': self.corY, 'damage': 1})
                     affected_area.append({'x': self.corX - 2, 'y': self.corY, 'damage': 1})
+            elif weapon.type == 1:  # Laser
+                if self.direction == 'up':
+                    for y_addiction in range(1, 6 - self.corY):
+                        affected_area.append({'x': self.corX, 'y': self.corY + y_addiction, 'damage': 1})
+                if self.direction == 'right':
+                    for x_addiction in range(1, 6 - self.corX):
+                        affected_area.append({'x': self.corX + x_addiction, 'y': self.corY, 'damage': 1})
+                if self.direction == 'down':
+                    for y_addiction in range(1, self.corY):
+                        affected_area.append({'x': self.corX, 'y': self.corY - y_addiction, 'damage': 1})
+                if self.direction == 'left':
+                    for x_addiction in range(1, self.corX):
+                        affected_area.append({'x': self.corX - x_addiction, 'y': self.corY, 'damage': 1})
+            elif weapon.type == 2:  # Sword
+                if self.direction == 'up':
+                    affected_area.append({'x': self.corX - 1, 'y': self.corY + 1, 'damage': 2})
+                    affected_area.append({'x': self.corX, 'y': self.corY + 1, 'damage': 2})
+                    affected_area.append({'x': self.corX + 1, 'y': self.corY + 1, 'damage': 2})
+                if self.direction == 'right':
+                    affected_area.append({'x': self.corX + 1, 'y': self.corY + 1, 'damage': 2})
+                    affected_area.append({'x': self.corX + 1, 'y': self.corY, 'damage': 2})
+                    affected_area.append({'x': self.corX + 1, 'y': self.corY - 1, 'damage': 2})
+                if self.direction == 'down':
+                    affected_area.append({'x': self.corX - 1, 'y': self.corY - 1, 'damage': 2})
+                    affected_area.append({'x': self.corX, 'y': self.corY - 1, 'damage': 2})
+                    affected_area.append({'x': self.corX + 1, 'y': self.corY - 1, 'damage': 2})
+                if self.direction == 'left':
+                    affected_area.append({'x': self.corX - 1, 'y': self.corY + 1, 'damage': 2})
+                    affected_area.append({'x': self.corX - 1, 'y': self.corY, 'damage': 2})
+                    affected_area.append({'x': self.corX - 1, 'y': self.corY - 1, 'damage': 2})
+            elif weapon.type == 3:  # Explosion
+                affected_area.append({'x': self.corX - 1, 'y': self.corY + 1, 'damage': 1})
+                affected_area.append({'x': self.corX, 'y': self.corY + 1, 'damage': 1})
+                affected_area.append({'x': self.corX + 1, 'y': self.corY + 1, 'damage': 1})
+                affected_area.append({'x': self.corX + 1, 'y': self.corY, 'damage': 1})
+                affected_area.append({'x': self.corX + 1, 'y': self.corY - 1, 'damage': 1})
+                affected_area.append({'x': self.corX - 1, 'y': self.corY - 1, 'damage': 1})
+                affected_area.append({'x': self.corX, 'y': self.corY - 1, 'damage': 1})
+                affected_area.append({'x': self.corX - 1, 'y': self.corY, 'damage': 1})
+                affected_area.append({'x': self.corX - 1, 'y': self.corY - 1, 'damage': 1})
+            elif weapon.type == 4:  # Dual Laser
+                if self.direction == 'up' or self.direction == 'down':
+                    for y in range(1, 6):
+                        if self.corY != y:
+                            affected_area.append({'x': self.corX, 'y': y, 'damage': 1})
+                if self.direction == 'left' or self.direction == 'right':
+                    for x in range(1, 6):
+                        if self.corX != x:
+                            affected_area.append({'x': x, 'y': self.corY, 'damage': 1})
+
         return affected_area
 
     def __str__(self):
@@ -131,6 +163,8 @@ class Weapon:
 
 
 if __name__ == '__main__':
-    Robot_red = Robot(color='red', robot_id=1, weapon=1)
-    Robot_red1 = Robot(color='red', robot_id=2)
+    Robot_red = Robot(color='red', robot_id=1, weapon=3)
+
+    Robot_red.move_to(3,3)
+    affected_area = Robot_red.get_shot_info()
     pass
