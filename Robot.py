@@ -4,7 +4,7 @@ import random
 class Robot:
     directions = ['up', 'right', 'down', 'left']
 
-    def __init__(self, color='gray', body=0, weapon=3, robot_id=0):
+    def __init__(self, color='gray', body=0, weapon=0, robot_id=0):
         self.id = robot_id
         self.color = color
         self.body = Body(body)
