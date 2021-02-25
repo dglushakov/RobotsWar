@@ -7,7 +7,7 @@ class Arena:
     ArenaHeight = 6
 
     RobotsEachTeam = 2
-    Robots = []
+    #Robots = []
 
     def __init__(self):
         self.loot = []
@@ -69,7 +69,7 @@ class Arena:
         for robot in self.Robots:  # TODO "The interface needs to have a menu with the option to quit and create a new battle"
             if robot.color != 'gray':  # TODO "The interface should also give the possibility to decide the number of robots present on each side."
                 for step in range(
-                        robot.movement_speed):  # TODO When the battle ends, amessage should show the winning team
+                        robot.movement_speed):
                     direction = random.choice(['x', 'y'])
                     if direction == 'x':
                         side = random.choice([-1, 1])

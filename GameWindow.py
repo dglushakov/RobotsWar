@@ -48,26 +48,53 @@ class GameWindow(QMainWindow):
         self.draw_arena()
 
     def draw_arena(self):
-        for i in range(1, self.arena.ArenaWidth + 1):
-            for j in range(1, self.arena.ArenaHeight + 1):
-                button = QPushButton()
-                button.setFixedSize(60, 60)
-                button.setStyleSheet(f"background: white;")
-                for robot in self.arena.get_robots():
-                    if robot.corY == i and robot.corX == j:
-                        button.setStyleSheet(f"background: {robot.color};")
+        if not self.is_game_over():
+            for i in range(1, self.arena.ArenaWidth + 1):
+                for j in range(1, self.arena.ArenaHeight + 1):
+                    button = QPushButton()
+                    button.setFixedSize(60, 60)
+                    button.setStyleSheet(f"background: white;")
+                    for robot in self.arena.get_robots():
+                        if robot.corY == i and robot.corX == j:
+                            button.setStyleSheet(f"background: {robot.color};")
 
-                        w = ''
-                        for weapon_slot in range(len(robot.weapon_equipped)):
-                            w += str(robot.weapon_equipped[weapon_slot])
-                        button_text = str(robot.id) + 'hp' + str(robot.health_points) + ' s' + str(robot.movement_speed) \
-                                      + '\nw: ' + w + ' \nb' + str(robot.body)
-                        button.setText(button_text)
-                self.arena_grid.addWidget(button, i, j)
+                            w = ''
+                            for weapon_slot in range(len(robot.weapon_equipped)):
+                                w += str(robot.weapon_equipped[weapon_slot])
+                            button_text = str(robot.id) + 'hp' + str(robot.health_points) + ' s' + str(
+                                robot.movement_speed) \
+                                          + '\nw: ' + w + ' \nb' + str(robot.body)
+                            button.setText(button_text)
+                    self.arena_grid.addWidget(button, i, j)
+        else:
+            self.end_game()
+
 
     def make_turn(self):
         self.arena.make_turn()
         self.draw_arena()
+
+    def is_game_over(self):
+        if len(self.arena.get_robots()) < 12:
+            return True
+        return False
+
+    def end_game(self):
+        print('game over')
+        for position, letter in enumerate('GAME'):
+            button = QPushButton()
+            button.setFixedSize(60, 60)
+            button.setStyleSheet(f"background: white;")
+            button.setText(letter)
+            self.arena_grid.addWidget(button, 3, position+2)
+        for position, letter in enumerate('OVER'):
+            button = QPushButton()
+            button.setFixedSize(60, 60)
+            button.setStyleSheet(f"background: white;")
+            button.setText(letter)
+            self.arena_grid.addWidget(button, 4, position+2)
+
+
 
 
 if __name__ == '__main__':
