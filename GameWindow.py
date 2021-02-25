@@ -17,9 +17,14 @@ class GameWindow(QMainWindow):
     def initUI(self):
         exitAction = QAction('Exit', self)
         exitAction.triggered.connect(qApp.quit)
+
+        new_game_actipn = QAction('New Game', self)
+        new_game_actipn.triggered.connect(self.new_game)
+
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('File')
         fileMenu.addAction(exitAction)
+        fileMenu.addAction(new_game_actipn)
 
         self.arena_grid = QGridLayout()
         self.update()
@@ -29,10 +34,6 @@ class GameWindow(QMainWindow):
 
         self.right_layout = QVBoxLayout()
         main_layout.addLayout(self.right_layout)
-
-        button1 = QPushButton('New game')
-        button1.clicked.connect(self.new_game)
-        self.right_layout.addWidget(button1)
 
         btn_make_turn = QPushButton('Make turn')
         btn_make_turn.clicked.connect(self.make_turn)
