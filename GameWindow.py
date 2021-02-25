@@ -69,13 +69,14 @@ class GameWindow(QMainWindow):
         else:
             self.end_game()
 
-
     def make_turn(self):
         self.arena.make_turn()
         self.draw_arena()
 
     def is_game_over(self):
-        if len(self.arena.get_robots()) < 12:
+        red = [r for r in self.arena.get_robots() if r.color == 'red']
+        blue = [r for r in self.arena.get_robots() if r.color == 'blue']
+        if len(red) <= 0 or len(blue) <= 0:
             return True
         return False
 
@@ -86,15 +87,13 @@ class GameWindow(QMainWindow):
             button.setFixedSize(60, 60)
             button.setStyleSheet(f"background: white;")
             button.setText(letter)
-            self.arena_grid.addWidget(button, 3, position+2)
+            self.arena_grid.addWidget(button, 3, position + 2)
         for position, letter in enumerate('OVER'):
             button = QPushButton()
             button.setFixedSize(60, 60)
             button.setStyleSheet(f"background: white;")
             button.setText(letter)
-            self.arena_grid.addWidget(button, 4, position+2)
-
-
+            self.arena_grid.addWidget(button, 4, position + 2)
 
 
 if __name__ == '__main__':
