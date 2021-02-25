@@ -7,7 +7,6 @@ class Arena:
     ArenaHeight = 6
 
     RobotsEachTeam = 2
-    #Robots = []
 
     def __init__(self):
         self.loot = []
@@ -66,7 +65,7 @@ class Arena:
         return self.Robots
 
     def make_turn(self):  # TODO "The first team to play is also random"
-        for robot in self.Robots:  # TODO "The interface needs to have a menu with the option to quit and create a new battle"
+        for robot in self.Robots:
             if robot.color != 'gray':  # TODO "The interface should also give the possibility to decide the number of robots present on each side."
                 for step in range(
                         robot.movement_speed):

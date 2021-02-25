@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QMainWindow, QAction, qApp, QGridLayout, QHBoxLayout, \
-    QVBoxLayout
+    QVBoxLayout, QDialog, QInputDialog
 
 from Arena import Arena
 
@@ -45,6 +45,14 @@ class GameWindow(QMainWindow):
         self.setGeometry(0, 0, 800, 400)
 
     def new_game(self):
+        number_of_robots, ok = QInputDialog.getInt(self, 'Input Dialog',
+            'Number of robots in each team:')
+        if ok:
+            if number_of_robots <= 6:
+                self.arena.RobotsEachTeam = number_of_robots
+            else:
+                self.arena.RobotsEachTeam = 6
+
         self.arena.reset()
         self.draw_arena()
 
