@@ -65,10 +65,11 @@ class Arena:
     def get_robots(self):
         return self.Robots
 
-    def make_turn(self):
-        for robot in self.Robots:
-            if robot.color != 'gray':
-                for step in range(robot.movement_speed):
+    def make_turn(self):  # TODO "The first team to play is also random"
+        for robot in self.Robots:  # TODO "The interface needs to have a menu with the option to quit and create a new battle"
+            if robot.color != 'gray':  # TODO "The interface should also give the possibility to decide the number of robots present on each side."
+                for step in range(
+                        robot.movement_speed):  # TODO When the battle ends, amessage should show the winning team
                     direction = random.choice(['x', 'y'])
                     if direction == 'x':
                         side = random.choice([-1, 1])
@@ -104,7 +105,7 @@ class Arena:
         affected_area = robot.get_shot_info()
         for cell in affected_area:
             for robot in self.Robots:
-                if robot.corX == cell['x'] and robot.corY == cell['y']: # TODO body should take damage before robot and save it, now when body changes HP restores (bug)
+                if robot.corX == cell['x'] and robot.corY == cell['y']:
                     damage = cell['damage']
                     not_absorbed_damage = damage - robot.body.hit_points
                     robot.body.hit_points -= damage

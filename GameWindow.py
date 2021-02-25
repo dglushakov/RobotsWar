@@ -58,7 +58,7 @@ class GameWindow(QMainWindow):
                         button.setStyleSheet(f"background: {robot.color};")
 
                         w = ''
-                        for weapon_slot in range(robot.weapon_slots):
+                        for weapon_slot in range(len(robot.weapon_equipped)):
                             w += str(robot.weapon_equipped[weapon_slot])
                         button_text = str(robot.id) + 'hp' + str(robot.health_points) + ' s' + str(robot.movement_speed) \
                                       + '\nw: ' + w + ' \nb' + str(robot.body)
